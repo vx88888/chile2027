@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<title>智利2027 · 从冰川到海岸</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="智利2027">
+<meta name="application-name" content="智利2027">
+<meta name="theme-color" content="#2f7f95">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+#gate{position:fixed;inset:0;z-index:50;background:var(--bg,#f3f6f8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;font-family:"Noto Sans SC","PingFang SC",sans-serif}
+#gate img{width:120px;height:120px;border-radius:26px}
+#gate h1{margin:0;font-size:28px}
+#gate input{font-size:22px;padding:12px 16px;border-radius:12px;border:2px solid #9aaab4;width:min(280px,80vw);text-align:center}
+#gate button{font-size:20px;padding:12px 28px;border-radius:999px;border:0;background:#b8323c;color:#fff;font-weight:700}
+#gate .err{color:#b8323c;min-height:1.5em;margin:0}</style>
+</head>
+<body>
+
+<div id="gate">
+  <img src="apple-touch-icon.png" alt="">
+  <h1>智利2027 · 从冰川到海岸</h1>
+  <p style="margin:0">请输入群里告诉大家的密码</p>
+  <input id="pw" type="password" inputmode="text" autocomplete="off" aria-label="密码">
+  <button id="pwGo">进入</button>
+  <p class="err" id="pwErr"></p>
+</div>
+<script>
+(function(){
+  var H="0c2c8a3a6e21db8d21849c79498b1c1cc27e2140aeab45b1dc72ebe195a74e0d", gate=document.getElementById("gate");
+  try{ if(localStorage.getItem("chile2027-ok")===H){gate.hidden=true;return;} }catch(e){}
+  function hex(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return("0"+b.toString(16)).slice(-2);}).join("");}
+  function tryIt(){
+    var v=document.getElementById("pw").value.trim().toLowerCase();
+    crypto.subtle.digest("SHA-256",new TextEncoder().encode(v)).then(function(d){
+      if(hex(d)===H){ try{localStorage.setItem("chile2027-ok",H);}catch(e){} gate.hidden=true; }
+      else document.getElementById("pwErr").textContent="密码不对，请再试一次";
+    });
+  }
+  document.getElementById("pwGo").addEventListener("click",tryIt);
+  document.getElementById("pw").addEventListener("keydown",function(e){if(e.key==="Enter")tryIt();});
+})();
+</script>
+
+<style>
+/* Layout: one tall phone-first column — a route strip of the whole journey, then the days in three legs (ice → lakes → ocean), then hotels, packing and links. Big type for older readers. */
+:root{
+  --bg:#f3f6f8; --surface:#ffffff; --ink:#15232c; --muted:#5a6b76; --line:#d8e1e7;
+  --glacier:#2f7f95; --glacier-soft:#e1eff3;
+  --lake:#3f7b52; --lake-soft:#e4f0e6;
+  --ocean:#2b5b9a; --ocean-soft:#e3ebf6;
+  --copihue:#b8323c;
+  --display:"Noto Serif SC","Songti SC","STSong",serif;
+  --body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f171c; --surface:#172229; --ink:#e8eef2; --muted:#9aaab4; --line:#2a3943;
+  --glacier:#6bbcd1; --glacier-soft:#16313a; --lake:#7fc394; --lake-soft:#183024;
+  --ocean:#83aee6; --ocean-soft:#172a42; --copihue:#ef6f78; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f171c; --surface:#172229; --ink:#e8eef2; --muted:#9aaab4; --line:#2a3943;
+  --glacier:#6bbcd1; --glacier-soft:#16313a; --lake:#7fc394; --lake-soft:#183024;
+  --ocean:#83aee6; --ocean-soft:#172a42; --copihue:#ef6f78; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:640px;margin:0 auto;padding-block:28px 64px;display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.25}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--copihue);outline-offset:2px}
+
+/* hero */
+.eyebrow{font-size:15px;letter-spacing:.08em;color:var(--muted);margin:0}
+.hero h1{font-size:44px;font-weight:900;margin-top:6px}
+.hero h1 .sub{display:block;font-size:20px;font-weight:600;color:var(--muted);margin-top:8px;letter-spacing:.04em}
+.hero p.lede{margin:16px 0 0;max-width:34em}
+
+/* route strip */
+.route{margin-top:22px;display:flex;flex-direction:column;gap:0;border-left:3px solid var(--line);padding-left:18px}
+.stop{position:relative;padding-block:6px}
+.stop::before{content:"";position:absolute;left:-26px;top:16px;width:13px;height:13px;border-radius:50%;background:var(--c);border:3px solid var(--bg)}
+.stop b{font-size:19px}
+.stop span{color:var(--muted);font-size:15px;margin-left:8px;font-variant-numeric:tabular-nums}
+.ice{--c:var(--glacier)} .lakes{--c:var(--lake)} .sea{--c:var(--ocean)}
+
+/* quick links */
+.links{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.links a{display:flex;flex-direction:column;gap:2px;padding:16px;border-radius:14px;background:var(--surface);border:1px solid var(--line);text-decoration:none}
+.links a strong{font-size:18px}
+.links a small{color:var(--muted);font-size:14px;line-height:1.4}
+@media (max-width:420px){.links{grid-template-columns:1fr}}
+
+/* today jump */
+.today{display:none;padding:14px 16px;border-radius:14px;background:var(--copihue);color:#fff;text-decoration:none;font-weight:700;text-align:center}
+.today.on{display:block}
+
+/* legs */
+.leg{display:flex;flex-direction:column;gap:14px}
+.leg-head{padding:0 18px 18px;border-radius:16px;background:var(--soft);overflow:hidden}
+.scene{display:block;width:calc(100% + 36px);max-width:none;margin:0 -18px 14px;height:auto;aspect-ratio:400/170}
+.leg-head .tag{font-size:14px;letter-spacing:.1em;color:var(--c);font-weight:700;margin:0}
+.leg-head h2{font-size:28px;margin-top:4px}
+.leg-head p{margin:8px 0 0;font-size:16px;color:var(--muted)}
+.ice .leg-head{--soft:var(--glacier-soft)} .lakes .leg-head{--soft:var(--lake-soft)} .sea .leg-head{--soft:var(--ocean-soft)}
+
+.day{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);scroll-margin-top:16px}
+.day:last-child{border-bottom:0}
+.date{text-align:center;font-variant-numeric:tabular-nums}
+.date .md{display:block;font-family:var(--display);font-size:24px;font-weight:900;color:var(--c);line-height:1.1}
+.date .wd{display:block;font-size:14px;color:var(--muted)}
+.day .body{min-width:0}
+.day h3{font-size:20px;font-weight:600}
+.day ul{margin:6px 0 0;padding-left:1.1em}
+.day li{margin:2px 0}
+.stay{margin-top:10px;font-size:16px;color:var(--muted)}
+.stay b{color:var(--ink);font-weight:500}
+.es{font-size:14px;color:var(--muted)}
+.day.is-today{background:var(--surface);border-radius:12px;padding-inline:10px;border:2px solid var(--copihue)}
+
+/* hotels */
+section h2.sec{font-size:28px}
+.hotels{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.hotel{padding:16px;border-radius:14px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.hotel .when{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.hotel h3{font-size:19px;font-weight:600}
+.hotel .addr{font-size:16px;word-break:break-word}
+.hotel .note{font-size:15px;color:var(--muted)}
+.show{align-self:flex-start;margin-top:8px;padding:10px 16px;border-radius:999px;border:2px solid var(--ink);background:transparent;color:var(--ink);font-weight:700;font-size:16px}
+
+/* packing */
+.pack{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.pack div{padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.pack .t{font-family:var(--display);font-size:26px;font-weight:900;font-variant-numeric:tabular-nums}
+.pack .p{font-size:15px;color:var(--muted);line-height:1.5}
+.pack .ice .t{color:var(--glacier)} .pack .lakes .t{color:var(--lake)} .pack .sea .t{color:var(--ocean)}
+@media (max-width:520px){.pack{grid-template-columns:1fr}}
+.tips{margin:14px 0 0;padding-left:1.1em}
+
+/* hola slideshow: stacked photos, each pushes forward from the back */
+.tag-hola{margin:0;font-size:14px;letter-spacing:.1em;color:var(--copihue);font-weight:700}
+.hola .hint{margin:4px 0 0;color:var(--muted);font-size:16px}
+.lede-hola{margin:8px 0 0;font-family:var(--display);font-size:20px;line-height:1.7;font-weight:600}
+.stage{position:relative;margin-top:14px;aspect-ratio:4/3;max-width:100%;border-radius:16px;overflow:hidden;background:#0d1418;touch-action:pan-y;user-select:none}
+.stage figure{position:absolute;inset:0;margin:0;opacity:0;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease}
+.stage figure.on{opacity:1;z-index:2}
+.stage img,.stage video{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){
+  .stage figure.on img,.stage figure.on video{animation:push .9s ease-out both}
+  @keyframes push{from{transform:scale(.78)}to{transform:scale(1)}}
+  .stage figure.on.alive img{animation:alive 3.4s ease-in-out forwards}
+  @keyframes alive{0%{transform:scale(1) translate(0,0) rotate(0)}50%{transform:scale(1.08) translate(-1.5%,-1%) rotate(-.4deg)}100%{transform:scale(1.14) translate(1.5%,-2%) rotate(.3deg)}}
+}
+.slide-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:12px;flex-wrap:wrap}
+.arrow{width:52px;height:52px;border-radius:50%;border:2px solid var(--ink);background:transparent;color:var(--ink);font-size:30px;line-height:1}
+.count{font-variant-numeric:tabular-nums;color:var(--muted);min-width:3.5em;text-align:center}
+.withmusic{padding:12px 20px;border-radius:999px;border:0;background:var(--copihue);color:#fff;font-size:17px;font-weight:700}
+
+/* scene galleries: 6 photos per leg, each leg with its own transition */
+.gal{position:relative;display:block;width:calc(100% + 36px);max-width:none;margin:0 -18px 14px;aspect-ratio:4/3;overflow:hidden;background:#0d1418;perspective:1400px;cursor:pointer}
+.gal figure{position:absolute;inset:0;margin:0;opacity:0;z-index:1;backface-visibility:hidden}
+.gal figure.on{opacity:1;z-index:2}
+.gal img{width:100%;height:100%;object-fit:cover;display:block}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:28px 16px 10px;color:#fff;font-size:17px;font-weight:700;background:linear-gradient(transparent,rgba(0,0,0,.55))}
+.gal .fxtag{position:absolute;top:10px;right:10px;z-index:9;padding:2px 10px;border-radius:999px;background:rgba(0,0,0,.45);color:#fff;font-size:12px}
+.credit{margin:0 0 12px;font-size:11px;line-height:1.5;color:var(--muted)}
+.gal .leave{opacity:1;z-index:4}
+.tile{position:absolute;z-index:5;background-size:cover}
+@media (prefers-reduced-motion:no-preference){
+  .gal[data-fx="toss"] .leave{transform-origin:left center;animation:flipAway .9s ease-in forwards}
+  @keyframes flipAway{to{transform:rotateY(-105deg);opacity:.2}}
+  .gal[data-fx="toss"] .leave{animation:tossAway .9s cubic-bezier(.5,0,.8,.4) forwards}
+  @keyframes tossAway{to{transform:translate(120%,-60%) rotate(35deg) scale(.6);opacity:0}}
+  .gal figure.on img{animation:settle 3s ease-out both}
+  @keyframes settle{from{transform:scale(1.08)}to{transform:scale(1)}}
+}
+@media (prefers-reduced-motion:reduce){.gal .leave{opacity:0;transition:opacity .6s}}
+
+/* spanish phrases */
+.hint2{margin:6px 0 0;color:var(--muted);font-size:16px}
+.phrases{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.ph{padding:14px 16px;border-radius:14px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.es-line{display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:8px}
+.ph strong{font-size:22px;font-family:var(--display);color:var(--copihue)}
+.ph .zh{font-size:17px}
+.ph .pr{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:15px;color:var(--muted)}
+.say{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid var(--copihue);background:transparent;font-size:20px}
+
+/* music */
+.music .hint{margin:4px 0 0;color:var(--muted);font-size:16px}
+.tracks{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.track{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.ice-t{--c:var(--glacier)} .lake-t{--c:var(--lake)} .sea-t{--c:var(--ocean)}
+.play{flex:none;width:56px;height:56px;border-radius:50%;border:0;background:var(--c);color:var(--bg);font-size:22px;line-height:1}
+.tinfo{min-width:0;flex:1;display:flex;flex-direction:column}
+.tinfo strong{font-size:18px}
+.tinfo small{color:var(--muted);font-size:14px}
+.bar{height:4px;border-radius:2px;background:var(--line);margin-top:8px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--c)}
+.track.playing{border-color:var(--c)}
+
+footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+
+/* driver card overlay */
+.card{position:fixed;inset:0;background:var(--surface);z-index:20;display:flex;flex-direction:column;justify-content:center;gap:18px;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px))}
+.card[hidden]{display:none}
+.card .lab{font-size:20px;color:var(--muted)}
+.card .big{font-size:34px;line-height:1.3;font-weight:700;word-break:break-word}
+.card .ph{font-size:26px;font-variant-numeric:tabular-nums}
+.card button{align-self:flex-start;padding:14px 22px;border-radius:999px;border:0;background:var(--ink);color:var(--surface);font-size:18px;font-weight:700}
+@media (prefers-reduced-motion:no-preference){.day.is-today{transition:background .3s}}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">2027年2月18日 – 3月2日 · 15人 · 智利夏天</p>
+    <h1>从冰川到海岸<span class="sub">2027 智利 · ¡Vamos, amigos!</span></h1>
+    <p class="lede">十三天，从南美最南端的巴塔哥尼亚冰川出发，一路往北，经过湖区火山，最后到太平洋海边。</p>
+    <div class="route" aria-label="路线">
+      <div class="stop ice"><b>蓬塔阿雷纳斯 · 纳塔雷斯港</b><span>2/18</span></div>
+      <div class="stop ice"><b>百内国家公园</b><span>2/19–2/21</span></div>
+      <div class="stop lakes"><b>巴拉斯港</b><span>2/22</span></div>
+      <div class="stop lakes"><b>普贡</b><span>2/23–2/26</span></div>
+      <div class="stop sea"><b>圣地亚哥</b><span>2/27</span></div>
+      <div class="stop sea"><b>金泰 · 瓦尔帕莱索</b><span>2/28–3/2</span></div>
+    </div>
+  </header>
+
+  <section class="hola" aria-labelledby="holaTitle">
+    <p class="tag-hola">出发之前</p>
+    <h2 class="sec" id="holaTitle">未见先识 · ¡Hola, amigos!</h2>
+    <p class="lede-hola">好时光尚未走远，重逢已指日可待。</p>
+    <div class="stage" id="stage" tabindex="0" aria-roledescription="幻灯片">
+      <figure class="on"><img src="hola/p4.jpg" alt="同行朋友合影 4"></figure>
+      <figure class="vid"><video src="hola/v1.mp4" poster="hola/v1_poster.jpg" muted playsinline preload="auto" aria-label="同行朋友合影 1（动态）"></video></figure>
+      <figure><img src="hola/p3.jpg" alt="同行朋友合影 3"></figure>
+      <figure class="vid"><video src="hola/v5.mp4" poster="hola/v5_poster.jpg" muted playsinline preload="auto" aria-label="同行朋友合影 5（动态）"></video></figure>
+      <figure><img src="hola/p9.jpg" alt="同行朋友合影 6"></figure>
+      <figure><img src="hola/p2.jpg" alt="同行朋友合影 2"></figure>
+    </div>
+    <div class="slide-nav">
+      <button class="arrow" id="prev" aria-label="上一张">‹</button>
+      <button class="withmusic" id="withMusic">♪ 配乐播放</button>
+      <button class="arrow" id="next" aria-label="下一张">›</button>
+      <span class="count" id="count">1 / 6</span>
+    </div>
+  </section>
+
+  <nav class="links" aria-label="常用链接">
+    <a href="https://photos.app.goo.gl/oVoa11ouJKJ8oSou8" target="_blank" rel="noopener"><strong>📷 共享相册</strong><small>大家的照片、视频都传这里</small></a>
+    <a href="https://drive.google.com/drive/folders/14JZgPHUqe59NU5zxzutCQI-hUMBxMpuh" target="_blank" rel="noopener"><strong>📁 资料文件夹</strong><small>入住凭证、主题曲、行程文档</small></a>
+  </nav>
+
+  <section class="music" aria-labelledby="musicTitle">
+    <h2 class="sec" id="musicTitle">我们的主题曲</h2>
+    <p class="hint">点 ▶ 播放，再点一下暂停。</p>
+    <div class="tracks">
+      <div class="track ice-t" data-src="songs/vamos-flamenco.mp4">
+        <button class="play" aria-label="播放 万里，我们同行（弗拉门戈版）">▶</button>
+        <div class="tinfo"><strong>万里，我们同行</strong><small>弗拉门戈版 · 出发 · 3:54</small>
+          <div class="bar"><span></span></div></div>
+      </div>
+      <div class="track lake-t" data-src="songs/glaciares.mp4">
+        <button class="play" aria-label="播放 冰川与风">▶</button>
+        <div class="tinfo"><strong>冰川与风</strong><small>安第斯纯音乐 · 冰川与湖区 · 2:35</small>
+          <div class="bar"><span></span></div></div>
+      </div>
+      <div class="track sea-t" data-src="songs/vamos-mariachi.mp4">
+        <button class="play" aria-label="播放 万里，我们同行（Mariachi 版）">▶</button>
+        <div class="tinfo"><strong>万里，我们同行</strong><small>Mariachi 版 · 圆满归来 · 3:17</small>
+          <div class="bar"><span></span></div></div>
+      </div>
+    </div>
+    <audio id="player" preload="none"></audio>
+  </section>
+
+  <a class="today" id="todayBtn" href="#">看今天的安排 ↓</a>
+
+  <section class="leg ice">
+    <div class="leg-head">
+      <div class="gal" data-fx="toss" aria-roledescription="幻灯片"><figure class="on"><img src="scenes/s01.jpg" alt="百内三塔" loading="lazy"><figcaption>百内三塔</figcaption></figure><figure><img src="scenes/s02.jpg" alt="百内角峰与湖" loading="lazy"><figcaption>百内角峰与湖</figcaption></figure><figure><img src="scenes/s03.jpg" alt="百内角峰" loading="lazy"><figcaption>百内角峰</figcaption></figure><figure><img src="scenes/s04.jpg" alt="百内山脉" loading="lazy"><figcaption>百内山脉</figcaption></figure><figure><img src="scenes/s05.jpg" alt="格雷湖的浮冰" loading="lazy"><figcaption>格雷湖的浮冰</figcaption></figure><figure><img src="scenes/s06.jpg" alt="格雷湖冰山" loading="lazy"><figcaption>格雷湖冰山</figcaption></figure></div>
+      <p class="tag">第一段 · 2/18–2/21</p>
+      <h2>巴塔哥尼亚 · 百内冰川</h2>
+      <p>白天约 10–15°C，风很大。防风外套、帽子、手套一定要带。</p>
+    </div>
+    <article class="day" data-date="2027-02-18">
+      <div class="date"><span class="md">2/18</span><span class="wd">周四</span></div>
+      <div class="body">
+        <h3>集合出发，到世界尽头</h3>
+        <ul>
+          <li>9人从圣地亚哥飞蓬塔阿雷纳斯，另外6人从其他国家飞来会合</li>
+          <li>蓬塔城市游：蓬塔博物馆、萨拉布劳恩市政公墓</li>
+          <li>乘车前往纳塔雷斯港</li>
+        </ul>
+        <p class="stay">住：<b>艾尔提布莱尼科酒店</b> <span class="es">Hotel Altiplanico Sur</span></p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-02-19">
+      <div class="date"><span class="md">2/19</span><span class="wd">周五</span></div>
+      <div class="body">
+        <h3>米洛登洞穴 · 百内公园</h3>
+        <ul>
+          <li>沿途游览米洛登洞穴</li>
+          <li>百内国家公园一日游</li>
+        </ul>
+        <p class="stay">住：<b>百内酒店</b> <span class="es">Hotel del Paine</span>（导游订）</p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-02-20">
+      <div class="date"><span class="md">2/20</span><span class="wd">周六</span></div>
+      <div class="body">
+        <h3>格雷冰川</h3>
+        <ul>
+          <li>上午乘船游览格雷冰川</li>
+          <li>下午轻徒步</li>
+        </ul>
+        <p class="stay">住：<b>佩霍埃湖酒店</b> <span class="es">Hostería Pehoé</span>（导游订）</p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-02-21">
+      <div class="date"><span class="md">2/21</span><span class="wd">周日</span></div>
+      <div class="body">
+        <h3>自由活动</h3>
+        <ul><li>在百内公园里自由走走、休息</li></ul>
+        <p class="stay">住：<b>塞拉诺河酒店</b> <span class="es">Hotel Río Serrano</span>（导游订，含三餐）</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="leg lakes">
+    <div class="leg-head">
+      <div class="gal" data-fx="toss" aria-roledescription="幻灯片"><figure class="on"><img src="scenes/s07.jpg" alt="湖与奥索尔诺火山" loading="lazy"><figcaption>湖与奥索尔诺火山</figcaption></figure><figure><img src="scenes/s08.jpg" alt="比亚里卡火山 · 普贡" loading="lazy"><figcaption>比亚里卡火山 · 普贡</figcaption></figure><figure><img src="scenes/s09.jpg" alt="佩特罗韦瀑布与奥索尔诺火山" loading="lazy"><figcaption>佩特罗韦瀑布与奥索尔诺火山</figcaption></figure><figure><img src="scenes/s10.jpg" alt="智利海鲜锅 Paila Marina" loading="lazy"><figcaption>智利海鲜锅 Paila Marina</figcaption></figure><figure><img src="scenes/s11.jpg" alt="新鲜海胆 Erizos" loading="lazy"><figcaption>新鲜海胆 Erizos</figcaption></figure><figure><img src="scenes/s12.jpg" alt="智利帝王蟹 Centolla" loading="lazy"><figcaption>智利帝王蟹 Centolla</figcaption></figure></div>
+      <p class="tag">第二段 · 2/22–2/26</p>
+      <h2>南部湖区 · 火山与温泉</h2>
+      <p>二十几度，舒服的夏天，偶尔下雨。带泳衣去泡温泉。</p>
+    </div>
+    <article class="day" data-date="2027-02-22">
+      <div class="date"><span class="md">2/22</span><span class="wd">周一</span></div>
+      <div class="body">
+        <h3>飞往湖区，吃海鲜</h3>
+        <ul>
+          <li>纳塔雷斯港 → 蓬塔，飞蒙特港</li>
+          <li>城市游，到安赫尔莫海鲜市场吃海鲜</li>
+        </ul>
+        <p class="stay">住：<b>巴拉斯港温德姆佩特拉酒店</b> <span class="es">Wyndham Puerto Varas Pettra</span></p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-02-23">
+      <div class="date"><span class="md">2/23</span><span class="wd">周二</span></div>
+      <div class="body">
+        <h3>佩特罗韦瀑布 · 前往普贡</h3>
+        <ul>
+          <li>途中游览佩特罗韦瀑布</li>
+          <li>乘车前往普贡</li>
+        </ul>
+        <p class="stay">住：<b>普贡</b>（4晚，凭证在 Cheryl 处）</p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-02-24">
+      <div class="date"><span class="md">2/24</span><span class="wd">周三</span></div>
+      <div class="body">
+        <h3>漂流 · 泡温泉</h3>
+        <ul>
+          <li>特兰库拉河漂流</li>
+          <li>泡几何温泉 <span class="es">Termas Geométricas</span></li>
+        </ul>
+        <p class="stay">住：<b>普贡</b></p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-02-25">
+      <div class="date"><span class="md">2/25</span><span class="wd">周四</span></div>
+      <div class="body">
+        <h3>雨林滑索 · 逛普贡</h3>
+        <ul>
+          <li>瓦尔迪维亚雨林树冠滑索</li>
+          <li>普贡城市游，逛超市</li>
+        </ul>
+        <p class="stay">住：<b>普贡</b></p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-02-26">
+      <div class="date"><span class="md">2/26</span><span class="wd">周五</span></div>
+      <div class="body">
+        <h3>河上钓鱼</h3>
+        <ul>
+          <li>上午柳库拉河钓鱼</li>
+          <li>下午自由活动</li>
+        </ul>
+        <p class="stay">住：<b>普贡</b></p>
+      </div>
+    </article>
+  </section>
+
+  <section class="leg sea">
+    <div class="leg-head">
+      <div class="gal" data-fx="toss" aria-roledescription="幻灯片"><figure class="on"><img src="scenes/s13.jpg" alt="圣地亚哥与安第斯山" loading="lazy"><figcaption>圣地亚哥与安第斯山</figcaption></figure><figure><img src="scenes/s14.jpg" alt="圣地亚哥新城" loading="lazy"><figcaption>圣地亚哥新城</figcaption></figure><figure><img src="scenes/s15.jpg" alt="瓦尔帕莱索的彩色老房" loading="lazy"><figcaption>瓦尔帕莱索的彩色老房</figcaption></figure><figure><img src="scenes/s16.jpg" alt="金泰小渔港" loading="lazy"><figcaption>金泰小渔港</figcaption></figure><figure><img src="scenes/s17.jpg" alt="金泰海滩" loading="lazy"><figcaption>金泰海滩</figcaption></figure><figure><img src="scenes/s18.jpg" alt="瓦尔帕莱索黄昏" loading="lazy"><figcaption>瓦尔帕莱索黄昏</figcaption></figure></div>
+      <p class="tag">第三段 · 2/27–3/2</p>
+      <h2>圣地亚哥 · 太平洋海岸</h2>
+      <p>干燥炎热，白天约 30°C，海边凉一些。带防晒、帽子。</p>
+    </div>
+    <article class="day" data-date="2027-02-27">
+      <div class="date"><span class="md">2/27</span><span class="wd">周六</span></div>
+      <div class="body">
+        <h3>飞回圣地亚哥</h3>
+        <ul><li>从湖区飞回首都圣地亚哥</li></ul>
+        <p class="stay">住：<b>比达索亚精品酒店</b> <span class="es">Hotel Eco Boutique Bidasoa</span></p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-02-28">
+      <div class="date"><span class="md">2/28</span><span class="wd">周日</span></div>
+      <div class="body">
+        <h3>圣地亚哥城市游 · 去海边</h3>
+        <ul>
+          <li>圣地亚哥城市游</li>
+          <li>前往海边小镇金泰</li>
+        </ul>
+        <p class="stay">住：<b>金泰</b> <span class="es">Quintay</span>（2晚，凭证在 Cheryl 处）</p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-03-01">
+      <div class="date"><span class="md">3/1</span><span class="wd">周一</span></div>
+      <div class="body">
+        <h3>瓦尔帕莱索一日游</h3>
+        <ul><li>彩色山城瓦尔帕莱索，港口和老街</li></ul>
+        <p class="stay">住：<b>金泰</b></p>
+      </div>
+    </article>
+    <article class="day" data-date="2027-03-02">
+      <div class="date"><span class="md">3/2</span><span class="wd">周二</span></div>
+      <div class="body">
+        <h3>回家</h3>
+        <ul><li>金泰返回圣地亚哥，送机</li></ul>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <h2 class="sec">学几句西班牙语</h2>
+    <p class="hint2">智利说西班牙语。照着中文或英文念就行，说错了当地人也会笑着回应。</p>
+    <div class="phrases">
+      <div class="ph"><div class="es-line"><strong lang="es">¡Hola! ¿Cómo está?</strong><button class="say" data-say="¡Hola! ¿Cómo está?" aria-label="朗读 ¡Hola! ¿Cómo está?" hidden>🔊</button></div><div class="zh">你好！您好吗？</div><div class="pr"><span>中文念：欧拉！ 科莫 埃斯塔？</span><span>English: OH-lah! KOH-moh ehs-TAH?</span></div></div>
+      <div class="ph"><div class="es-line"><strong lang="es">¡Muchas gracias!</strong><button class="say" data-say="¡Muchas gracias!" aria-label="朗读 ¡Muchas gracias!" hidden>🔊</button></div><div class="zh">非常感谢！</div><div class="pr"><span>中文念：木恰斯 格拉西亚斯！</span><span>English: MOO-chahs GRAH-see-ahs!</span></div></div>
+      <div class="ph"><div class="es-line"><strong lang="es">¡Qué hermoso!</strong><button class="say" data-say="¡Qué hermoso!" aria-label="朗读 ¡Qué hermoso!" hidden>🔊</button></div><div class="zh">太美了！</div><div class="pr"><span>中文念：克 艾尔莫索！</span><span>English: keh ehr-MOH-soh!</span></div></div>
+      <div class="ph"><div class="es-line"><strong lang="es">¡Qué rico!</strong><button class="say" data-say="¡Qué rico!" aria-label="朗读 ¡Qué rico!" hidden>🔊</button></div><div class="zh">真好吃！</div><div class="pr"><span>中文念：克 里科！</span><span>English: keh REE-koh!</span></div></div>
+      <div class="ph"><div class="es-line"><strong lang="es">¡Excelente!</strong><button class="say" data-say="¡Excelente!" aria-label="朗读 ¡Excelente!" hidden>🔊</button></div><div class="zh">太棒了！</div><div class="pr"><span>中文念：艾克塞伦特！</span><span>English: ehk-seh-LEHN-teh!</span></div></div>
+      <div class="ph"><div class="es-line"><strong lang="es">¡Bravo!</strong><button class="say" data-say="¡Bravo!" aria-label="朗读 ¡Bravo!" hidden>🔊</button></div><div class="zh">好极了！真棒！（鼓掌叫好时说）</div><div class="pr"><span>中文念：布拉沃！</span><span>English: BRAH-voh!</span></div></div>
+      <div class="ph"><div class="es-line"><strong lang="es">¡Somos buenos amigos!</strong><button class="say" data-say="¡Somos buenos amigos!" aria-label="朗读 ¡Somos buenos amigos!" hidden>🔊</button></div><div class="zh">我们是好朋友！</div><div class="pr"><span>中文念：索莫斯 布埃诺斯 阿米戈斯！</span><span>English: SOH-mohs BWEH-nohs ah-MEE-gohs!</span></div></div>
+    </div>
+    <p class="hint2" style="margin-top:10px">小贴士：智利人说"太棒了"，最常说 <b lang="es">¡Qué bacán!</b>（克 巴坎！/ keh bah-KAHN!）</p>
+  </section>
+
+  <section>
+    <h2 class="sec">酒店地址</h2>
+    <p style="margin:6px 0 0;color:var(--muted);font-size:16px">打车或问路时，点「给司机看」，把手机屏幕给对方看。</p>
+    <div class="hotels">
+      <div class="hotel">
+        <span class="when">2/18 · 1晚</span>
+        <h3>艾尔提布莱尼科酒店</h3>
+        <span class="addr">Hotel Altiplanico Sur<br>Huertos Familiares 282, Puerto Natales</span>
+        <span class="note">电话 +56 9 5660 3836 · 14:00 后入住</span>
+        <button class="show" data-name="Hotel Altiplanico Sur" data-addr="Huertos Familiares 282, Puerto Natales" data-phone="+56 9 5660 3836">给司机看</button>
+      </div>
+      <div class="hotel">
+        <span class="when">2/19 – 2/21 · 3晚</span>
+        <h3>百内酒店 · 佩霍埃湖酒店 · 塞拉诺河酒店</h3>
+        <span class="note">都在百内公园里，导游订的，全程由导游带。</span>
+      </div>
+      <div class="hotel">
+        <span class="when">2/22 · 1晚</span>
+        <h3>巴拉斯港温德姆佩特拉酒店</h3>
+        <span class="addr">Wyndham Puerto Varas Pettra<br>Imperial 561, Puerto Varas</span>
+        <span class="note">电话 +56 65 222 2000 · 15:00 后入住</span>
+        <button class="show" data-name="Wyndham Puerto Varas Pettra" data-addr="Imperial 561, Puerto Varas" data-phone="+56 65 222 2000">给司机看</button>
+      </div>
+      <div class="hotel">
+        <span class="when">2/23 – 2/26 · 4晚</span>
+        <h3>普贡住宿</h3>
+        <span class="note">地址待补充（凭证在 Cheryl 处）</span>
+      </div>
+      <div class="hotel">
+        <span class="when">2/27 · 1晚</span>
+        <h3>比达索亚精品酒店</h3>
+        <span class="addr">Hotel Eco Boutique Bidasoa<br>Av. Vitacura 4873, Vitacura, Santiago</span>
+        <span class="note">电话 +56 2 2602 3900 · 15:00 后入住</span>
+        <button class="show" data-name="Hotel Eco Boutique Bidasoa" data-addr="Av. Vitacura 4873, Vitacura, Santiago" data-phone="+56 2 2602 3900">给司机看</button>
+      </div>
+      <div class="hotel">
+        <span class="when">2/28 – 3/1 · 2晚</span>
+        <h3>金泰住宿</h3>
+        <span class="note">地址待补充（凭证在 Cheryl 处）</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">带什么衣服</h2>
+    <div class="pack">
+      <div class="ice"><div class="t">10–15°</div><div class="p">百内冰川<br>防风外套、毛衣、帽子手套</div></div>
+      <div class="lakes"><div class="t">20多°</div><div class="p">湖区<br>薄外套、雨具、泳衣</div></div>
+      <div class="sea"><div class="t">约30°</div><div class="p">圣地亚哥<br>短袖、防晒、太阳镜</div></div>
+    </div>
+    <ul class="tips">
+      <li>用餐自理（塞拉诺河酒店含三餐）。</li>
+      <li>贵重物品随身带，或锁在酒店保险柜；下车别把东西留在车上。</li>
+      <li>请自己买好旅游保险。</li>
+      <li>入住时报名字或确认号，前台需要时出示护照。</li>
+    </ul>
+  </section>
+
+  <footer><p class="credit">风景照片来自维基共享资源（Wikimedia Commons），按授权注明作者：百内三塔（Dimitry B. · CC BY 2.0）；百内角峰与湖（Winky · CC BY 2.0）；百内角峰（Alex Proimos · CC BY 2.0）；百内山脉（Franz Xaver · CC BY-SA 3.0）；格雷湖的浮冰（Stevage · CC BY-SA 3.0）；格雷湖冰山（Martin St-Amant · CC BY-SA 3.0）；湖与奥索尔诺火山（Carlos Teixidor Cadenas · CC BY 4.0）；比亚里卡火山 · 普贡（Nbendersky · CC BY-SA 4.0）；佩特罗韦瀑布与奥索尔诺火山（Viense · CC BY-SA 4.0）；智利海鲜锅 Paila Marina（Nicorubik · CC BY-SA 4.0）；新鲜海胆 Erizos（Rodrigo Fernández · CC BY-SA 4.0）；智利帝王蟹 Centolla（Virtualfueguina · CC BY-SA 4.0）；圣地亚哥与安第斯山（Patrick Coe · CC BY 2.0）；圣地亚哥新城（Dennis Jarvis · CC BY-SA 2.0）；瓦尔帕莱索的彩色老房（Chileanhistory · CC0）；金泰小渔港（Hardy Mardy · 公有领域）；金泰海滩（Aeveraal · CC BY 4.0）；瓦尔帕莱索黄昏（Pablo Garcia Saldaña · CC0）。</p>行程以旅行社最终确认为准 · 有问题找 Vivian</footer>
+</div>
+
+<div class="card" id="card" hidden role="dialog" aria-modal="true" aria-labelledby="cardName">
+  <div class="lab">Por favor, llévenos a: 请带我们去</div>
+  <div class="big" id="cardName"></div>
+  <div class="big" id="cardAddr" style="font-weight:500"></div>
+  <div class="ph" id="cardPhone"></div>
+  <button id="cardClose">关闭</button>
+</div>
+
+<script>
+(function(){
+  // Highlight today's day during the trip (Chile time ≈ any local date match is fine for a group page)
+  var d=new Date();
+  var iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  var el=document.querySelector('.day[data-date="'+iso+'"]');
+  if(el){
+    el.classList.add("is-today"); el.id="today";
+    var b=document.getElementById("todayBtn"); b.classList.add("on");
+    b.addEventListener("click",function(e){e.preventDefault();el.scrollIntoView({behavior:"smooth",block:"start"});});
+  }
+  // Driver card
+  var card=document.getElementById("card");
+  document.querySelectorAll(".show").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      document.getElementById("cardName").textContent=btn.dataset.name;
+      document.getElementById("cardAddr").textContent=btn.dataset.addr;
+      document.getElementById("cardPhone").textContent="Tel. "+btn.dataset.phone;
+      card.hidden=false; document.getElementById("cardClose").focus();
+    });
+  });
+  document.getElementById("cardClose").addEventListener("click",function(){card.hidden=true;});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")card.hidden=true;});
+  // Hola slideshow: each photo pushes in, holds still, then comes alive; swipe or arrows to move
+  var stage=document.getElementById("stage"), figs=[].slice.call(stage.children), n=figs.length, k=0, hold=0, cnt=document.getElementById("count");
+  var aliveT=null, nextT=null;
+  function show(i){k=(i+n)%n;figs.forEach(function(f,j){f.classList.toggle("on",j===k);f.classList.remove("alive");});cnt.textContent=(k+1)+" / "+n;
+    clearTimeout(aliveT);clearTimeout(nextT);
+    // push in (0.9 s) -> still for 3 s -> comes alive for 3.4 s -> next photo
+    figs.forEach(function(f,j){var v=f.querySelector("video");if(v&&j!==k){v.pause();v.currentTime=0;}});
+    var vid=figs[k].querySelector("video");
+    // photo: still 1 s, then CSS comes-alive; video slide: still 1 s on first frame, then the clip plays
+    aliveT=setTimeout(function(){ if(vid){ vid.currentTime=0; var pr=vid.play(); if(pr&&pr.catch)pr.catch(function(){}); } else figs[k].classList.add("alive"); },1900);
+    var dur=vid&&vid.duration?Math.round(vid.duration*1000):4000;
+    nextT=setTimeout(function(){ if(Date.now()>=hold) show(k+1); else nextT=setTimeout(function(){show(k+1);},hold-Date.now()); },1900+Math.max(dur,3400));}
+  function manual(d){hold=Date.now()+8000;show(k+d);}
+  document.getElementById("prev").addEventListener("click",function(){manual(-1);});
+  document.getElementById("next").addEventListener("click",function(){manual(1);});
+  stage.addEventListener("keydown",function(e){if(e.key==="ArrowRight")manual(1);if(e.key==="ArrowLeft")manual(-1);});
+  var x0=null;
+  stage.addEventListener("pointerdown",function(e){x0=e.clientX;});
+  stage.addEventListener("pointerup",function(e){if(x0===null)return;var dx=e.clientX-x0;x0=null;if(Math.abs(dx)>40)manual(dx<0?1:-1);});
+  show(0);
+  // Scene galleries: every 3 s (staggered), or tap to advance
+  [].slice.call(document.querySelectorAll(".gal")).forEach(function(g,gi){
+    var figs=[].slice.call(g.querySelectorAll("figure")), n=figs.length, k=0, fx=g.dataset.fx, busy=false;
+    var still=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function shatter(fig){
+      var src=fig.querySelector("img").currentSrc||fig.querySelector("img").src, cols=5, rows=4, w=g.clientWidth, h=g.clientHeight;
+      var img=fig.querySelector("img"), iw=img.naturalWidth||w, ih=img.naturalHeight||h, sc=Math.max(w/iw,h/ih), bw=iw*sc, bh=ih*sc, ox=(w-bw)/2, oy=(h-bh)/2;
+      for(var r=0;r<rows;r++)for(var c=0;c<cols;c++){
+        var t=document.createElement("div"); t.className="tile";
+        var tw=w/cols, th=h/rows;
+        t.style.cssText="left:"+(c*tw)+"px;top:"+(r*th)+"px;width:"+(tw+1)+"px;height:"+(th+1)+"px;background-image:url('"+src+"');background-size:"+bw+"px "+bh+"px;background-position:"+(ox-c*tw)+"px "+(oy-r*th)+"px";
+        g.appendChild(t);
+        var dx=(c-(cols-1)/2)*60+(Math.random()-.5)*80, dy=200+Math.random()*200, rot=(Math.random()-.5)*120;
+        t.animate([{transform:"none",opacity:1},{transform:"translate("+dx+"px,"+dy+"px) rotate("+rot+"deg) scale(.6)",opacity:0}],{duration:900+Math.random()*300,delay:Math.random()*150,easing:"cubic-bezier(.4,0,.9,.5)",fill:"forwards"}).onfinish=(function(el){return function(){el.remove();};})(t);
+      }
+    }
+    function next(){
+      if(busy)return; busy=true;
+      var old=figs[k]; k=(k+1)%n; var nw=figs[k];
+      nw.classList.add("on");
+      if(fx==="shatter"&&!still&&old.animate){ old.classList.remove("on"); shatter(old); setTimeout(function(){busy=false;},400); return; }
+      old.classList.remove("on"); old.classList.add("leave");
+      setTimeout(function(){old.classList.remove("leave");busy=false;},950);
+    }
+    g.addEventListener("click",next);
+    setTimeout(function(){ setInterval(function(){ if(!document.hidden) next(); },3000); }, gi*1000);
+  });
+  // Read Spanish phrases aloud where the viewer supports it
+  if(!(window.claude&&window.claude.use) && "speechSynthesis" in window){
+    [].slice.call(document.querySelectorAll(".say")).forEach(function(b){
+      b.hidden=false;
+      b.addEventListener("click",function(){ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(b.dataset.say); u.lang="es-ES"; u.rate=.85;
+        var vs=speechSynthesis.getVoices().filter(function(v){return /^es/i.test(v.lang);}); if(vs.length)u.voice=vs[0]; speechSynthesis.speak(u); });
+    });
+  }
+  if(window.claude&&window.claude.use){ window.claude.use("tts").then(function(t){
+    if(!t) return;
+    [].slice.call(document.querySelectorAll(".say")).forEach(function(b){
+      b.hidden=false;
+      b.addEventListener("click",function(){ t.speak(b.dataset.say,{language:"es",rate:.85}).catch(function(err){ if(err&&err.code==="not_granted") document.querySelectorAll(".say").forEach(function(x){x.hidden=true;}); }); });
+    });
+  }).catch(function(){}); }
+  // Music player: one shared <audio>, each track toggles play/pause
+  var player=document.getElementById("player"), current=null;
+  var tracks=[].slice.call(document.querySelectorAll(".track"));
+  function reset(t){t.classList.remove("playing");t.querySelector(".play").textContent="▶";}
+  tracks.forEach(function(t,i){
+    t.querySelector(".play").addEventListener("click",function(){
+      if(current===t && !player.paused){player.pause();return;}
+      if(current!==t){
+        if(current){reset(current);current.querySelector(".bar span").style.width="0";}
+        current=t; player.src=t.dataset.src;
+      }
+      player.play().catch(function(){});
+    });
+  });
+  player.addEventListener("play",function(){if(current){current.classList.add("playing");current.querySelector(".play").textContent="❚❚";}});
+  player.addEventListener("pause",function(){if(current)current.querySelector(".play").textContent="▶";});
+  player.addEventListener("timeupdate",function(){
+    if(current&&player.duration)current.querySelector(".bar span").style.width=(player.currentTime/player.duration*100)+"%";
+  });
+  document.getElementById("withMusic").addEventListener("click",function(){
+    hold=0; show(0);
+    var first=tracks[0];
+    if(current===first && !player.paused){player.pause();return;}
+    first.querySelector(".play").click();
+  });
+  player.addEventListener("play",function(){document.getElementById("withMusic").textContent="❚❚ 暂停音乐";});
+  player.addEventListener("pause",function(){document.getElementById("withMusic").textContent="♪ 配乐播放";});
+  player.addEventListener("ended",function(){
+    var i=tracks.indexOf(current); reset(current); current.querySelector(".bar span").style.width="0";
+    var next=tracks[i+1]; if(next){current=next;player.src=next.dataset.src;player.play().catch(function(){});}
+  });
+})();
+</script>
+
+</body>
+</html>
