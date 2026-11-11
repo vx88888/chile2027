@@ -12,8 +12,8 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
-#gate{position:fixed;inset:0;z-index:50;background:var(--bg,#f3f6f8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;font-family:"Noto Sans SC","PingFang SC",sans-serif}
+<style>:root{padding-top:env(safe-area-inset-top,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+#gate{position:fixed;inset:0;z-index:50;background:var(--bg,#f3f6f8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;font-family:"PingFang SC","Noto Sans SC",sans-serif}
 #gate img{width:120px;height:120px;border-radius:26px}
 #gate h1{margin:0;font-size:28px}
 #gate input{font-size:22px;padding:12px 16px;border-radius:12px;border:2px solid #9aaab4;width:min(280px,80vw);text-align:center}
@@ -26,7 +26,7 @@
   <img src="apple-touch-icon.png" alt="">
   <h1>智利2027 · 从冰川到海岸</h1>
   <p style="margin:0">请输入群里告诉大家的密码</p>
-  <input id="pw" type="password" inputmode="text" autocomplete="off" aria-label="密码">
+  <input id="pw" type="password" autocomplete="off" aria-label="密码">
   <button id="pwGo">进入</button>
   <p class="err" id="pwErr"></p>
 </div>
@@ -136,7 +136,7 @@ section h2.sec{font-size:28px}
 
 /* packing */
 .pack{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.pack div{padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.pack > div{padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
 .pack .t{font-family:var(--display);font-size:26px;font-weight:900;font-variant-numeric:tabular-nums}
 .pack .p{font-size:15px;color:var(--muted);line-height:1.5}
 .pack .ice .t{color:var(--glacier)} .pack .lakes .t{color:var(--lake)} .pack .sea .t{color:var(--ocean)}
@@ -216,10 +216,34 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
 .card .ph{font-size:26px;font-variant-numeric:tabular-nums}
 .card button{align-self:flex-start;padding:14px 22px;border-radius:999px;border:0;background:var(--ink);color:var(--surface);font-size:18px;font-weight:700}
 @media (prefers-reduced-motion:no-preference){.day.is-today{transition:background .3s}}
+/* tabs: bottom bar on phones, top bar on wide screens */
+.view{display:flex;flex-direction:column;gap:32px}
+.view[hidden]{display:none}
+body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:15;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);
+  padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+.tabbar button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border:0;background:transparent;color:var(--muted);font-size:15px;font-weight:700;border-radius:12px}
+.tabbar .i{font-size:24px;line-height:1}
+.tabbar button[aria-current="page"]{color:var(--copihue);background:var(--bg)}
+@media (min-width:760px){
+  body{padding-bottom:0}
+  .tabbar{top:env(safe-area-inset-top,0px);bottom:auto;max-width:680px;margin:0 auto;border:1px solid var(--line);border-top:0;border-radius:0 0 16px 16px}
+  .wrap{padding-top:70px}
+  .tabbar button{flex-direction:row;justify-content:center;gap:6px;padding:12px 0}
+  .tabbar .i{font-size:20px}
+}
+.legtabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.lt{display:flex;flex-direction:column;align-items:center;padding:10px 4px;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--ink);font-size:17px;font-weight:700}
+.lt small{font-size:13px;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums}
+.lt.ice[aria-selected="true"]{border-color:var(--glacier);background:var(--glacier-soft)}
+.lt.lakes[aria-selected="true"]{border-color:var(--lake);background:var(--lake-soft)}
+.lt.sea[aria-selected="true"]{border-color:var(--ocean);background:var(--ocean-soft)}
+.view[data-view="trip"] .leg[hidden]{display:none}
 </style>
 
-<div class="wrap">
 
+<div class="wrap">
+<div class="view" data-view="home">
   <header class="hero">
     <p class="eyebrow">2027年2月18日 – 3月2日 · 15人 · 智利夏天</p>
     <h1>从冰川到海岸<span class="sub">2027 智利 · ¡Vamos, amigos!</span></h1>
@@ -281,9 +305,14 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
     </div>
     <audio id="player" preload="none"></audio>
   </section>
-
+</div>
+<div class="view" data-view="trip" hidden>
   <a class="today" id="todayBtn" href="#">看今天的安排 ↓</a>
-
+  <div class="legtabs" role="tablist" aria-label="行程三段">
+    <button class="lt ice" data-leg="ice" aria-selected="true">❄️ 冰川<small>2/18–2/21</small></button>
+    <button class="lt lakes" data-leg="lakes" aria-selected="false">🌋 湖区<small>2/22–2/26</small></button>
+    <button class="lt sea" data-leg="sea" aria-selected="false">🌊 海岸<small>2/27–3/2</small></button>
+  </div>
   <section class="leg ice">
     <div class="leg-head">
       <div class="gal" data-fx="toss" aria-roledescription="幻灯片"><figure class="on"><img src="scenes/s01.jpg" alt="百内三塔" loading="lazy"><figcaption>百内三塔</figcaption></figure><figure><img src="scenes/s02.jpg" alt="百内角峰与湖" loading="lazy"><figcaption>百内角峰与湖</figcaption></figure><figure><img src="scenes/s03.jpg" alt="百内角峰" loading="lazy"><figcaption>百内角峰</figcaption></figure><figure><img src="scenes/s04.jpg" alt="百内山脉" loading="lazy"><figcaption>百内山脉</figcaption></figure><figure><img src="scenes/s05.jpg" alt="格雷湖的浮冰" loading="lazy"><figcaption>格雷湖的浮冰</figcaption></figure><figure><img src="scenes/s06.jpg" alt="格雷湖冰山" loading="lazy"><figcaption>格雷湖冰山</figcaption></figure></div>
@@ -335,7 +364,7 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
     </article>
   </section>
 
-  <section class="leg lakes">
+  <section class="leg lakes" hidden>
     <div class="leg-head">
       <div class="gal" data-fx="toss" aria-roledescription="幻灯片"><figure class="on"><img src="scenes/s07.jpg" alt="湖与奥索尔诺火山" loading="lazy"><figcaption>湖与奥索尔诺火山</figcaption></figure><figure><img src="scenes/s08.jpg" alt="比亚里卡火山 · 普贡" loading="lazy"><figcaption>比亚里卡火山 · 普贡</figcaption></figure><figure><img src="scenes/s09.jpg" alt="佩特罗韦瀑布与奥索尔诺火山" loading="lazy"><figcaption>佩特罗韦瀑布与奥索尔诺火山</figcaption></figure><figure><img src="scenes/s10.jpg" alt="智利海鲜锅 Paila Marina" loading="lazy"><figcaption>智利海鲜锅 Paila Marina</figcaption></figure><figure><img src="scenes/s11.jpg" alt="新鲜海胆 Erizos" loading="lazy"><figcaption>新鲜海胆 Erizos</figcaption></figure><figure><img src="scenes/s12.jpg" alt="智利帝王蟹 Centolla" loading="lazy"><figcaption>智利帝王蟹 Centolla</figcaption></figure></div>
       <p class="tag">第二段 · 2/22–2/26</p>
@@ -399,7 +428,7 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
     </article>
   </section>
 
-  <section class="leg sea">
+  <section class="leg sea" hidden>
     <div class="leg-head">
       <div class="gal" data-fx="toss" aria-roledescription="幻灯片"><figure class="on"><img src="scenes/s13.jpg" alt="圣地亚哥与安第斯山" loading="lazy"><figcaption>圣地亚哥与安第斯山</figcaption></figure><figure><img src="scenes/s14.jpg" alt="圣地亚哥新城" loading="lazy"><figcaption>圣地亚哥新城</figcaption></figure><figure><img src="scenes/s15.jpg" alt="瓦尔帕莱索的彩色老房" loading="lazy"><figcaption>瓦尔帕莱索的彩色老房</figcaption></figure><figure><img src="scenes/s16.jpg" alt="金泰小渔港" loading="lazy"><figcaption>金泰小渔港</figcaption></figure><figure><img src="scenes/s17.jpg" alt="金泰海滩" loading="lazy"><figcaption>金泰海滩</figcaption></figure><figure><img src="scenes/s18.jpg" alt="瓦尔帕莱索黄昏" loading="lazy"><figcaption>瓦尔帕莱索黄昏</figcaption></figure></div>
       <p class="tag">第三段 · 2/27–3/2</p>
@@ -441,9 +470,10 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
       </div>
     </article>
   </section>
-
+</div>
+<div class="view" data-view="spanish" hidden>
   <section>
-    <h2 class="sec">学几句西班牙语</h2>
+    <h2 class="sec">常用西班牙语</h2>
     <p class="hint2">智利说西班牙语。照着中文或英文念就行，说错了当地人也会笑着回应。</p>
     <div class="phrases">
       <div class="ph"><div class="es-line"><strong lang="es">¡Hola! ¿Cómo está?</strong><button class="say" data-say="¡Hola! ¿Cómo está?" aria-label="朗读 ¡Hola! ¿Cómo está?" hidden>🔊</button></div><div class="zh">你好！您好吗？</div><div class="pr"><span>中文念：欧拉！ 科莫 埃斯塔？</span><span>English: OH-lah! KOH-moh ehs-TAH?</span></div></div>
@@ -456,7 +486,8 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
     </div>
     <p class="hint2" style="margin-top:10px">小贴士：智利人说"太棒了"，最常说 <b lang="es">¡Qué bacán!</b>（克 巴坎！/ keh bah-KAHN!）</p>
   </section>
-
+</div>
+<div class="view" data-view="hotels" hidden>
   <section>
     <h2 class="sec">酒店地址</h2>
     <p style="margin:6px 0 0;color:var(--muted);font-size:16px">打车或问路时，点「给司机看」，把手机屏幕给对方看。</p>
@@ -499,7 +530,8 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
       </div>
     </div>
   </section>
-
+</div>
+<div class="view" data-view="tips" hidden>
   <section>
     <h2 class="sec">带什么衣服</h2>
     <div class="pack">
@@ -514,9 +546,31 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
       <li>入住时报名字或确认号，前台需要时出示护照。</li>
     </ul>
   </section>
-
+  <section>
+    <h2 class="sec">当地风俗和注意事项</h2>
+    <ul class="tips">
+      <li><b>电源</b>：220 伏，插头是 C 型和 L 型（圆脚）。美国的扁脚插头要带转换头；手机充电器一般都支持 100–240 伏，只换插头就行。</li>
+      <li><b>钱</b>：当地用智利比索（CLP）。大部分店可以刷卡，小摊和零用备一点现金。</li>
+      <li><b>小费</b>：餐厅账单上常会附一项建议 10% 的小费（propina），可以自己决定付不付。导游、司机的小费按旅行社的安排。</li>
+      <li><b>吃饭时间</b>：当地人晚饭吃得晚，一般晚上 8 点以后，餐厅开门也晚。</li>
+      <li><b>阳光很强</b>：南部紫外线特别强，冰川段天冷也要涂防晒、戴墨镜和帽子。</li>
+      <li><b>喝水</b>：城市自来水经过处理，但水质偏硬，肠胃敏感的朋友喝瓶装水更放心。</li>
+      <li><b>看好手机</b>：圣地亚哥等城市扒窃比较常见，手机别放在餐桌上，包背在前面。</li>
+      <li><b>地震</b>：智利地震多，住进酒店先看一眼紧急出口在哪里。</li>
+      <li><b>证件</b>：美国护照旅游 90 天内免签。持中国护照的朋友，请出发前向旅行社或智利领事馆确认签证（有说法持有效美国签证、剩余 6 个月以上可免签，以官方答复为准）。</li>
+    </ul>
+  </section>
   <footer><p class="credit">风景照片来自维基共享资源（Wikimedia Commons），按授权注明作者：百内三塔（Dimitry B. · CC BY 2.0）；百内角峰与湖（Winky · CC BY 2.0）；百内角峰（Alex Proimos · CC BY 2.0）；百内山脉（Franz Xaver · CC BY-SA 3.0）；格雷湖的浮冰（Stevage · CC BY-SA 3.0）；格雷湖冰山（Martin St-Amant · CC BY-SA 3.0）；湖与奥索尔诺火山（Carlos Teixidor Cadenas · CC BY 4.0）；比亚里卡火山 · 普贡（Nbendersky · CC BY-SA 4.0）；佩特罗韦瀑布与奥索尔诺火山（Viense · CC BY-SA 4.0）；智利海鲜锅 Paila Marina（Nicorubik · CC BY-SA 4.0）；新鲜海胆 Erizos（Rodrigo Fernández · CC BY-SA 4.0）；智利帝王蟹 Centolla（Virtualfueguina · CC BY-SA 4.0）；圣地亚哥与安第斯山（Patrick Coe · CC BY 2.0）；圣地亚哥新城（Dennis Jarvis · CC BY-SA 2.0）；瓦尔帕莱索的彩色老房（Chileanhistory · CC0）；金泰小渔港（Hardy Mardy · 公有领域）；金泰海滩（Aeveraal · CC BY 4.0）；瓦尔帕莱索黄昏（Pablo Garcia Saldaña · CC0）。</p>行程以旅行社最终确认为准 · 有问题找 Vivian</footer>
 </div>
+</div>
+<nav class="tabbar" aria-label="分页">
+  <button data-go="home" aria-current="page"><span class="i">🏠</span>首页</button>
+  <button data-go="trip"><span class="i">🗺️</span>行程</button>
+  <button data-go="spanish"><span class="i">💬</span>西语</button>
+  <button data-go="hotels"><span class="i">🏨</span>酒店</button>
+  <button data-go="tips"><span class="i">🧳</span>须知</button>
+</nav>
+
 
 <div class="card" id="card" hidden role="dialog" aria-modal="true" aria-labelledby="cardName">
   <div class="lab">Por favor, llévenos a: 请带我们去</div>
@@ -532,10 +586,25 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
   var d=new Date();
   var iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
   var el=document.querySelector('.day[data-date="'+iso+'"]');
+  // Tabs (bottom bar) and the three legs inside 行程
+  var views=[].slice.call(document.querySelectorAll(".view")), tabs=[].slice.call(document.querySelectorAll(".tabbar button"));
+  function goView(name){
+    if(!views.some(function(v){return v.dataset.view===name;})) name="home";
+    views.forEach(function(v){v.hidden=v.dataset.view!==name;});
+    tabs.forEach(function(t){ if(t.dataset.go===name) t.setAttribute("aria-current","page"); else t.removeAttribute("aria-current"); });
+    window.scrollTo(0,0);
+    if(location.hash!=="#"+name){ try{history.replaceState(null,"","#"+name);}catch(e){} }
+  }
+  tabs.forEach(function(t){t.addEventListener("click",function(){goView(t.dataset.go);});});
+  window.addEventListener("hashchange",function(){goView(location.hash.slice(1));});
+  var legs=[].slice.call(document.querySelectorAll(".leg")), lts=[].slice.call(document.querySelectorAll(".lt"));
+  function showLeg(k){ legs.forEach(function(s){s.hidden=!s.classList.contains(k);}); lts.forEach(function(b){b.setAttribute("aria-selected",b.dataset.leg===k?"true":"false");}); }
+  lts.forEach(function(b){b.addEventListener("click",function(){showLeg(b.dataset.leg);});});
+  goView(location.hash.slice(1)||"home");
   if(el){
     el.classList.add("is-today"); el.id="today";
     var b=document.getElementById("todayBtn"); b.classList.add("on");
-    b.addEventListener("click",function(e){e.preventDefault();el.scrollIntoView({behavior:"smooth",block:"start"});});
+    b.addEventListener("click",function(e){e.preventDefault(); var lg=el.closest(".leg"); ["ice","lakes","sea"].forEach(function(k){ if(lg.classList.contains(k)) showLeg(k); }); el.scrollIntoView({behavior:"smooth",block:"start"});});
   }
   // Driver card
   var card=document.getElementById("card");
